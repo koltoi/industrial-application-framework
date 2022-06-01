@@ -241,7 +241,7 @@ following commands.
     type AppReporteData struct {
         //this stucture can be anything
     }
-    
+    //test
     // ConsulStatus defines the observed state of Consul
     // +k8s:openapi-gen=true
     type ConsulStatus struct {
@@ -249,6 +249,8 @@ following commands.
         AppReportedData  AppReporteData                  `json:"appReportedData,omitempty"`
     }
     ```
+   Create a new folder and start to initialise the project using below command:
+   >operator-sdk init --domain=dac.nokia.com --repo=github.com/(repo-owner)/Consul-operator 
 
    Command to generate your own API resource, controller and CRD:
    >operator-sdk create api --group=app.dac.nokia.com --version=v1alpha1 --kind=Consul
