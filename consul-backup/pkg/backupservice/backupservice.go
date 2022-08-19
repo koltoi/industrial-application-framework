@@ -111,10 +111,17 @@ func StartPeriodicBackup(nameSpace string) error {
 		log.Error(err, "Failed to upload data to backup storage")
 	}
 
+	initialDelay, err := time.ParseDuration(serviceconfig.ConfigData.InitialDelay)
+	if err != nil {
+		return errors.Wrap(err, "Failed to parse initial delay")
+	}
+	
 	duration, err := time.ParseDuration(serviceconfig.ConfigData.Duration)
 	if err != nil {
 		return errors.Wrap(err, "Failed to parse duration")
 	}
+
+	time.Sleep(initialDelay)
 
 	ticker := time.NewTicker(duration)
 	for range ticker.C {

@@ -16,6 +16,7 @@ type Configuration struct {
 	Duration        string `yaml:"duration"`
 	ConsulAddress   string `yaml:"consulAddress"`
 	BackupCrName    string `yaml:"backupCrName"`
+	InitialDelay    string `yaml:"initialDelay"`
 }
 
 const configFileKey = "CONFIG_FILE"
