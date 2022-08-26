@@ -33,7 +33,7 @@ spec:
             claimName: storage-for-db
         - name: config
           configMap:
-            name: example-consul-cm            
+            name: example-consul-cm
       containers:
         - name: example-consul
           image: registry.dac.nokia.com/public/consul:1.4.4

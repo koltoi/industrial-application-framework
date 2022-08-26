@@ -45,7 +45,7 @@ func (handler *BackupCRHandler) fillBackupStoreAccessInfo(nameSpace string) erro
 	if err != nil {
 		return errors.Wrap(err, "Failed to read backup CR")
 	}
-	
+
 	if found {
 		handler.s3Endpoint = field["s3Endpoint"].(string)
 		handler.bucketName = field["bucketConfiguration"].(map[string]interface{})["bucketName"].(string)
@@ -89,6 +89,13 @@ func (handler *BackupCRHandler) uploadDataToBackupStore (nameSpace string, consu
 func StartPeriodicBackup(nameSpace string) error {
 	log.Info("BackupService called")
 
+	initialDelay, err := time.ParseDuration(serviceconfig.ConfigData.InitialDelay)
+	if err != nil {
+		return errors.Wrap(err, "Failed to parse initial delay")
+	}
+
+	time.Sleep(initialDelay)
+
 	k8sClient, err := k8sclient.GetK8sClient()
 	if err != nil {
 		return errors.Wrap(err, "Failed to get k8s client")
@@ -106,10 +113,6 @@ func StartPeriodicBackup(nameSpace string) error {
 	}
 
 	handler := &BackupCRHandler{Client: k8sClient}
-	err = handler.uploadDataToBackupStore(nameSpace, consulClient)
-	if err != nil {
-		log.Error(err, "Failed to upload data to backup storage")
-	}
 
 	duration, err := time.ParseDuration(serviceconfig.ConfigData.Duration)
 	if err != nil {
@@ -117,7 +120,7 @@ func StartPeriodicBackup(nameSpace string) error {
 	}
 
 	ticker := time.NewTicker(duration)
-	for range ticker.C {
+	for ; true; <-ticker.C  {
 		err = handler.uploadDataToBackupStore(nameSpace, consulClient)
 		if err != nil {
 			log.Error(err, "Failed to upload a file to backup storage")
