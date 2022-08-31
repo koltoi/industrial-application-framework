@@ -14,4 +14,4 @@ data:
     duration: 1m59s
     consulAddress: example-consul-service:8500
     backupCrName: backup-consul
-    initialDelay: 5s
+    initialDelay: 25s
